@@ -182,17 +182,16 @@ static void s_parse_options(int argc, char **argv, struct app_ctx *ctx) {
         exit(1);
     }
 
+    // Set default AWS region if not specified
+    if (ctx->region == NULL) {
+        ctx->region = aws_string_new_from_c_str(ctx->allocator, DEFAULT_REGION);
+    }
+
     if(ctx->reqCommand == DECRYPT){
         // Check if ciphertext is set
         if (ctx->ciphertext_b64 == NULL) {
             fprintf(stderr, "--ciphertext must be set\n");
             exit(1);
-        }
-
-
-        // Set default AWS region if not specified
-        if (ctx->region == NULL) {
-            ctx->region = aws_string_new_from_c_str(ctx->allocator, DEFAULT_REGION);
         }
 
     }else if(ctx->reqCommand == GEN_RANDOM){
@@ -216,7 +215,6 @@ static void s_parse_options(int argc, char **argv, struct app_ctx *ctx) {
             }
         }
     }
-
 }
 
 static int decrypt(struct app_ctx *app_ctx, struct aws_byte_buf *ciphertext_decrypted_b64) {
@@ -424,10 +422,9 @@ static int Command(struct app_ctx *app_ctx, struct aws_byte_buf *output) {
         default:
             fprintf(stderr, "Not Supported Command\n");
             exit(1);
-
     }
 
-    return rc
+    return rc;
 }
 
 int main(int argc, char **argv) {
