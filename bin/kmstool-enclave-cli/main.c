@@ -434,15 +434,27 @@ int main(int argc, char **argv) {
     struct aws_byte_buf output;
     int rc;
 
+    fprintf(stdout, "\n kmstool_enclave_cli main 00 \n");
+
     /* Initialize the SDK */
     aws_nitro_enclaves_library_init(NULL);
+
+    fprintf(stdout, "\n kmstool_enclave_cli main 01 \n");
 
     /* Initialize the entropy pool: this is relevant for TLS */
     AWS_ASSERT(aws_nitro_enclaves_library_seed_entropy(1024) == AWS_OP_SUCCESS);
 
+    fprintf(stdout, "\n kmstool_enclave_cli main 02 \n");
+
     /* Parse the commandline */
     app_ctx.allocator = aws_nitro_enclaves_get_allocator();
+
+    fprintf(stdout, "\n kmstool_enclave_cli main 03 \n");
+
     s_parse_options(argc, argv, &app_ctx);
+
+    fprintf(stdout, "\n kmstool_enclave_cli main 04 \n");
+
 
     /* Optional: Enable logging for aws-c-* libraries */
     struct aws_logger err_logger;
@@ -451,8 +463,13 @@ int main(int argc, char **argv) {
         .level = AWS_LL_INFO,
         .filename = NULL,
     };
+
+    fprintf(stdout, "\n kmstool_enclave_cli main 05 \n");
+
     aws_logger_init_standard(&err_logger, app_ctx.allocator, &options);
+    fprintf(stdout, "\n kmstool_enclave_cli main 06 \n");
     aws_logger_set(&err_logger);
+    fprintf(stdout, "\n kmstool_enclave_cli main 07 \n");
 
     rc = Command(&app_ctx, &output);
 
