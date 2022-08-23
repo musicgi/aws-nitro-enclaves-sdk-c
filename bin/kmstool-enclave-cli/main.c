@@ -59,7 +59,7 @@ struct app_ctx {
 };
 
 static void s_usage(int exit_code) {
-    fprintf(stderr, "usage: kmstool_enclave_cli [options]\n");
+    fprintf(stderr, "usage: oKMS kmstool_enclave_cli [options]\n");
     fprintf(stderr, "\n Options: \n\n");
     fprintf(stderr, "    --region REGION: AWS region to use for KMS\n");
     fprintf(stderr, "    --proxy-port PORT: Connect to KMS proxy on PORT. Default: 8000\n");
@@ -91,7 +91,7 @@ static struct aws_cli_option s_long_options[] = {
 
     {"ciphertext", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'c'},
 
-    {"numberOfBytes", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'b'},
+    {"numberOfBytes", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'b'},
 
     {"keyId", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'i'},
     {"keySpec", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'e'},
@@ -455,34 +455,35 @@ int main(int argc, char **argv) {
 
     fprintf(stdout, "\n kmstool_enclave_cli main 04 \n");
 
-
-    /* Optional: Enable logging for aws-c-* libraries */
-    struct aws_logger err_logger;
-    struct aws_logger_standard_options options = {
-        .file = stderr,
-        .level = AWS_LL_INFO,
-        .filename = NULL,
-    };
-
-    fprintf(stdout, "\n kmstool_enclave_cli main 05 \n");
-
-    aws_logger_init_standard(&err_logger, app_ctx.allocator, &options);
-    fprintf(stdout, "\n kmstool_enclave_cli main 06 \n");
-    aws_logger_set(&err_logger);
-    fprintf(stdout, "\n kmstool_enclave_cli main 07 \n");
-
-    rc = Command(&app_ctx, &output);
-
-    if (rc != AWS_OP_SUCCESS) {
-        fprintf(stderr, "Could not decrypt\n");
-        exit(1);
-    }
-
-    /* Print the base64-encoded plaintext to stdout */
-    fprintf(stdout, "%s", (const char *)output.buffer);
-
-    aws_byte_buf_clean_up(&output);
-    aws_nitro_enclaves_library_clean_up();
-
     return 0;
+
+    // /* Optional: Enable logging for aws-c-* libraries */
+    // struct aws_logger err_logger;
+    // struct aws_logger_standard_options options = {
+    //     .file = stderr,
+    //     .level = AWS_LL_INFO,
+    //     .filename = NULL,
+    // };
+
+    // fprintf(stdout, "\n kmstool_enclave_cli main 05 \n");
+
+    // aws_logger_init_standard(&err_logger, app_ctx.allocator, &options);
+    // fprintf(stdout, "\n kmstool_enclave_cli main 06 \n");
+    // aws_logger_set(&err_logger);
+    // fprintf(stdout, "\n kmstool_enclave_cli main 07 \n");
+
+    // rc = Command(&app_ctx, &output);
+
+    // if (rc != AWS_OP_SUCCESS) {
+    //     fprintf(stderr, "Could not decrypt\n");
+    //     exit(1);
+    // }
+
+    // /* Print the base64-encoded plaintext to stdout */
+    // fprintf(stdout, "%s", (const char *)output.buffer);
+
+    // aws_byte_buf_clean_up(&output);
+    // aws_nitro_enclaves_library_clean_up();
+
+    // return 0;
 }
