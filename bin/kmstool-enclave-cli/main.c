@@ -69,7 +69,7 @@ static void s_usage(int exit_code) {
 
     fprintf(stderr, "    [Dcrypt] --ciphertext CIPHERTEXT: base64-encoded ciphertext that need to decrypt\n");
 
-    fprintf(stderr, "    [GetRand] --numberofbytes The length of the random byte string. This parameter is required.\n");
+    fprintf(stderr, "    [GetRand] --numberOfBytes The length of the random byte string. This parameter is required.\n");
 
     fprintf(stderr, "    [GetDataKey] --keyId KEY_ID: key id (for symmetric keys)\n");
     fprintf(stderr, "    [GetDataKey] --keySpec KEY_ID: (for symmetric keys, is optional)\n");
@@ -89,14 +89,14 @@ static struct aws_cli_option s_long_options[] = {
     {"aws-secret-access-key", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 's'},
     {"aws-session-token", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 't'},
 
-    {"ciphertext", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'c'},
+    {"ciphertext", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'c'},
 
-    {"numberofbytes", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'b'},
+    {"numberOfBytes", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'b'},
 
-    {"keyId", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'i'},
+    {"keyId", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'i'},
     {"keySpec", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'e'},
 
-    {"reqCommand", AWS_CLI_OPTIONS_REQUIRED_ARGUMENT, NULL, 'd'},
+    {"reqCommand", AWS_CLI_OPTIONS_OPTIONAL_ARGUMENT, NULL, 'd'},
 
     {NULL, 0, NULL, 0},
 };
@@ -197,7 +197,7 @@ static void s_parse_options(int argc, char **argv, struct app_ctx *ctx) {
     }else if(ctx->reqCommand == GEN_RANDOM){
 
         if (ctx->numberOfBytes == NULL) {
-            fprintf(stderr, "--numberofbytes must be set\n");
+            fprintf(stderr, "--numberOfBytes must be set\n");
             exit(1);
         }
 
@@ -405,6 +405,8 @@ static int generateDataKey(struct app_ctx *app_ctx, struct aws_byte_buf *output)
 
 static int Command(struct app_ctx *app_ctx, struct aws_byte_buf *output) {
     ssize_t rc = 0;
+
+    fprintf(stdout, "app_ctx->reqCommand : %d", app_ctx->reqCommand);
 
     switch(app_ctx->reqCommand){
         case DECRYPT:
